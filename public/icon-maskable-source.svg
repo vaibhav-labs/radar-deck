@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="sweepm" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#eafff2" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#eafff2" stop-opacity="0" />
+    </radialGradient>
+    <clipPath id="discm">
+      <circle cx="256" cy="256" r="150" />
+    </clipPath>
+  </defs>
+
+  <!-- Full-bleed background: maskable icons get cropped to a circle/rounded-square by the OS,
+       so all icon content below stays inside the ~80% safe-zone circle (radius 205px from centre). -->
+  <rect width="512" height="512" fill="#14301f" />
+
+  <circle cx="256" cy="256" r="150" fill="#0e2417" />
+  <g clip-path="url(#discm)">
+    <path d="M256 256 L256 106 A150 150 0 0 1 406 206 Z" fill="url(#sweepm)" />
+  </g>
+  <g fill="none" stroke="#5fbf8b" stroke-width="5" opacity="0.8">
+    <circle cx="256" cy="256" r="115" />
+    <circle cx="256" cy="256" r="75" />
+    <circle cx="256" cy="256" r="35" />
+  </g>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#5fbf8b" stroke-width="8" />
+  <circle cx="310" cy="210" r="10" fill="#eafff2" />
+</svg>
