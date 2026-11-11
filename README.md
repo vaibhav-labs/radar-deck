@@ -11,7 +11,7 @@ Cowork radar (daily) ──writes──▶ Drive: radar-deck-cards.json
                                         ▲   │
               Apps Script web app (runs as you) reads both, writes decisions
                                         ▲   │  HTTPS (shared secret, no CORS preflight)
-                            This PWA, static, deployed to Netlify
+                        This PWA, static, deployed on GitHub Pages
 ```
 
 No secrets live in this repo, in chat, or in the cloud radar. The radar has no
@@ -74,22 +74,34 @@ npm run test    # unit tests
 npm run build   # tsc + vite build -> dist/
 ```
 
-### Deploy to Netlify
+### Deploy to GitHub Pages
 
-```sh
-npx netlify-cli login       # opens a browser, sign in yourself
-npx netlify-cli init        # or connect the GitHub repo via app.netlify.com
-npx netlify-cli deploy --prod
-```
+This repo already has a GitHub Actions workflow
+([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) that builds
+and deploys on every push to `main`. One manual, one-time step on your side:
 
-Or push this repo to a new **private** GitHub repo and connect it at
-[app.netlify.com](https://app.netlify.com) — `netlify.toml` already has the
-build command and publish directory. Netlify will give you a URL like
-`https://radar-deck-xyz.netlify.app`.
+1. Push this repo to GitHub (already done if you're reading this there).
+2. In the repo: **Settings → Pages → Build and deployment → Source: "GitHub
+   Actions"**. (Not "Deploy from a branch" — the workflow needs Actions mode.)
+3. Push to `main` (or go to the **Actions** tab and run the "Deploy to GitHub
+   Pages" workflow manually). It builds with `npm ci && npm run build` and
+   publishes `dist/`.
+
+Your URL will be `https://<your-username>.github.io/<repo-name>/` — note the
+trailing slash and the subpath; everything in this app (manifest, service
+worker, icons) uses relative paths specifically so it works correctly under
+that subpath. If you ever host it at a domain root instead (a custom domain,
+or a different static host), nothing needs to change — relative paths resolve
+the same way either way.
+
+A GitHub Pages site built from a private repo is still reachable by anyone
+with the URL (GitHub Pages has no per-viewer access control on the free/Pro
+tiers) — but without your Apps Script secret, which only ever lives in this
+device's `localStorage`, nobody can see your cards or decisions through it.
 
 ### First run on your phone
 
-1. Open the Netlify URL in mobile Safari or Chrome.
+1. Open the GitHub Pages URL in mobile Safari or Chrome.
 2. Go to **Settings** in the app, paste the Apps Script `/exec` URL and the
    secret you generated above. Tap Save.
 3. iPhone: tap the Share icon → **Add to Home Screen** to install it.
@@ -110,9 +122,9 @@ The Playwright test runs against a built-and-previewed copy of the app
 Script or Drive calls. It was run once locally with Chromium
 (`npx playwright install chromium`) while building this.
 
-Run Lighthouse against the deployed Netlify URL (Chrome DevTools → Lighthouse,
-or `npx lighthouse <url> --view`) to confirm it reports as an installable PWA
-with an Accessibility score of 95 or higher.
+Run Lighthouse against the deployed GitHub Pages URL (Chrome DevTools →
+Lighthouse, or `npx lighthouse <url> --view`) to confirm it reports as an
+installable PWA with an Accessibility score of 95 or higher.
 
 ## 4. Troubleshooting
 
@@ -130,10 +142,10 @@ with an Accessibility score of 95 or higher.
 ## 5. Handing this to the radar
 
 Once the backend is deployed and `setup()` has run, you'll have three ids from
-the execution log (folder, cards file, decisions file) and the Netlify URL.
-Paste this, filled in, into Claude Cowork so the daily radar starts feeding
-this app — this is the one step that needs to happen from your own session,
-since the radar has no access to your Apps Script project:
+the execution log (folder, cards file, decisions file) and the GitHub Pages
+URL. Paste this, filled in, into Claude Cowork so the daily radar starts
+feeding this app — this is the one step that needs to happen from your own
+session, since the radar has no access to your Apps Script project:
 
 ```
 RADAR STEP: Radar Deck PWA
@@ -141,5 +153,5 @@ Drive folder "Radar Deck PWA": <folder id from setup()>
 Cards file radar-deck-cards.json: <file id from setup()>   (the radar overwrites it every run)
 Decisions file radar-deck-decisions.json: <file id from setup()>   (the radar only reads it)
 Each run: (1) read the decisions file and merge it with the claude.ai deck's decisions; for each id the newer `at` wins, and a decision is new when handled[id] != its `at`. (2) After Open now is final, write {"meta": <meta/run>, "cards": <every card, same fields as the claude.ai deck>, "handled": {id: at for every decision acted on}} to the cards file with update_file.
-App URL (for the digest only, no secret): <netlify url>
+App URL (for the digest only, no secret): <github pages url>
 ```

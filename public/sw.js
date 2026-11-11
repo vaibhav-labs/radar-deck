@@ -6,8 +6,14 @@
 const CACHE_NAME = "radar-deck-shell-v1";
 
 self.addEventListener("install", (event) => {
+  // Resolve against the SW's own scope rather than hardcoding "/" — this works
+  // the same whether it's served from a domain root or a subpath (e.g. a
+  // GitHub Pages project site at /radar-deck/).
+  const scope = self.registration.scope;
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(["/", "/manifest.webmanifest"]))
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => cache.addAll([scope, new URL("manifest.webmanifest", scope).toString()]))
   );
   self.skipWaiting();
 });

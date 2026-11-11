@@ -74,7 +74,9 @@ const cards: Record<string, Card> = {
   },
 };
 
-const API_URL = "https://fake-radar-backend.example/exec";
+// Shaped like a real Apps Script exec URL (and on an allowed CSP connect-src host) —
+// fully intercepted by mockBackend() below, never actually reaches script.google.com.
+const API_URL = "https://script.google.com/macros/s/fake-test-deployment/exec";
 const SECRET = "test-secret";
 
 /** A tiny stateful fake of the Apps Script backend, so reloads reflect prior decisions. */

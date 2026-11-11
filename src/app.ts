@@ -441,7 +441,9 @@ export function startApp(): void {
   });
 
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").catch(() => {
+    // A relative path resolves against the current document, so this works the
+    // same at a domain root or a subpath (e.g. GitHub Pages' /radar-deck/).
+    navigator.serviceWorker.register("sw.js").catch(() => {
       // Non-fatal — the app still works without offline caching.
     });
   }

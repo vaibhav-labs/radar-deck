@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Radar Deck</title>
     <meta name="description" content="A private swipe deck for one person's job, grant and contest radar." />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'"
+    />
 
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Radar" />
 
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f0" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14161a" />
-
-    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
     <div id="app">
